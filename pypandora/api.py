@@ -7,7 +7,7 @@ from urllib.parse import urljoin, urlparse
 import requests
 
 
-class PyProject():
+class PyPandora():
 
     def __init__(self, root_url: str):
         '''Query a specific instance.

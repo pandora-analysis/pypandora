@@ -4,11 +4,11 @@ API reference
 .. toctree::
    :maxdepth: 2
 
-.. automodule:: pyproject
+.. automodule:: pypandora
    :members:
 
-PyProject
+PyPandora
 ---------
 
-.. autoclass:: PyProject
+.. autoclass:: PyPandora
    :members:

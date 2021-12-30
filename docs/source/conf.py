@@ -17,12 +17,12 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'PyProject'
-copyright = '2021, Lookyloo team'
-author = 'Lookyloo team'
+project = 'PyPandora'
+copyright = '2021, Pandora team'
+author = 'Pandora team'
 
 # The full version, including alpha/beta/rc tags
-release = 'v0.0.1'
+release = 'v0.1'
 
 
 # -- General configuration ---------------------------------------------------
