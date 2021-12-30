@@ -2,7 +2,7 @@ import argparse
 import json
 import sys
 
-from .api import PyProject
+from .api import PyPandora
 
 
 def main():
@@ -12,7 +12,7 @@ def main():
     group.add_argument('--redis_up', action='store_true', help='Check if redis is up.')
     args = parser.parse_args()
 
-    client = PyProject(args.url)
+    client = PyPandora(args.url)
 
     if not client.is_up:
         print(f'Unable to reach {client.root_url}. Is the server up?')
