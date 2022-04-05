@@ -13,3 +13,7 @@ class TestBasic(unittest.TestCase):
     def test_up(self):
         self.assertTrue(self.client.is_up)
         self.assertTrue(self.client.redis_up())
+
+    def test_submit(self):
+        response = self.client.submit_from_disk(__file__)
+        self.assertTrue(response['success'], response)
