@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pypandora"
-version = "0.1"
+version = "0.7"
 description = "Python CLI and module for pandora"
 authors = ["Raphaël Vinot <raphael.vinot@circl.lu>"]
 license = "BSD-3-Clause"
@@ -26,7 +26,7 @@ classifiers = [
 include = ['README.md']
 
 [tool.poetry.scripts]
-client = 'pypandora:main'
+pandora = 'pypandora:main'
 
 [tool.poetry.dependencies]
 python = "^3.8"
