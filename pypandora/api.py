@@ -69,7 +69,7 @@ class PyPandora():
                seed_expire: Optional[Union[datetime, timedelta, int]]=None) -> Dict[str, Any]:
         '''Submit a file from the disk.
 
-        :param file_in memory: Memory object of the file to submit.
+        :param file_in_memory: Memory object of the file to submit.
         :param filename: The name of the file.
         :param seed_expire: If not None, the response will contain a seed allowing to view the result of the analysis.
                             If the type is a `datetime`, the seed will expire at that time.
