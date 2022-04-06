@@ -37,6 +37,14 @@ class PyPandora():
 
     def submit_from_disk(self, file_on_disk: Union[str, Path], /,
                          seed_expire: Optional[Union[datetime, timedelta, int]]=None) -> Dict[str, Any]:
+        '''Submit a file from the disk.
+
+        :param file_on_disk: The path to the file to upload.
+        :param seed_expire: If not None, the response will contain a seed allowing to view the result of the analysis.
+                            If the type is a `datetime`, the seed will expire at that time.
+                            If the type is a `timedelta`, the seed will expire then the given time interval expires.
+                            If the type is a `int`, the seed will expire after the value (in seconds) expires. 0 means the seed never expires.
+        '''
         if not isinstance(file_on_disk, Path):
             file_on_disk = Path(file_on_disk)
         if not file_on_disk.exists():
@@ -59,6 +67,15 @@ class PyPandora():
 
     def submit(self, file_in_memory: BytesIO, filename: str, /,
                seed_expire: Optional[Union[datetime, timedelta, int]]=None) -> Dict[str, Any]:
+        '''Submit a file from the disk.
+
+        :param file_in memory: Memory object of the file to submit.
+        :param filename: The name of the file.
+        :param seed_expire: If not None, the response will contain a seed allowing to view the result of the analysis.
+                            If the type is a `datetime`, the seed will expire at that time.
+                            If the type is a `timedelta`, the seed will expire then the given time interval expires.
+                            If the type is a `int`, the seed will expire after the value (in seconds) expires. 0 means the seed never expires.
+        '''
         files = {'file': (filename, file_in_memory)}
         url = urljoin(self.root_url, 'submit')
         r = self.session.post(url, files=files, params={'validity': self._expire_in_sec(seed_expire)})

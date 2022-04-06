@@ -4,6 +4,8 @@ version = "0.7"
 description = "Python CLI and module for pandora"
 authors = ["Raphaël Vinot <raphael.vinot@circl.lu>"]
 license = "BSD-3-Clause"
+repository = "https://github.com/pandora-analysis/pypandora"
+documentation = "https://pypandora.readthedocs.io/en/latest/"
 
 readme = "README.md"
 
