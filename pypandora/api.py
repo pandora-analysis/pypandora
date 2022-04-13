@@ -82,3 +82,9 @@ class PyPandora():
         to_return = r.json()
         to_return['link'] = urljoin(self.root_url, to_return['link'])
         return to_return
+
+    def status(self, task_id, seed):
+        url = urljoin(self.root_url, 'task_status')
+        r = self.session.get(url, params={'task_id': task_id, 'seed': seed})
+        to_return = r.json()
+        return to_return
