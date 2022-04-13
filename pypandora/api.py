@@ -83,7 +83,12 @@ class PyPandora():
         to_return['link'] = urljoin(self.root_url, to_return['link'])
         return to_return
 
-    def status(self, task_id, seed):
+    def task_status(self, task_id: str, seed: Optional[str]=None) -> Dict[str, Any]:
+        '''Get the status of a task.
+
+        :param task_id: The UUID of the task
+        :param seed: The seed. The seed must be still valid at the time the query is made. It is optional if the session is authenticated.
+        '''
         url = urljoin(self.root_url, 'task_status')
         r = self.session.get(url, params={'task_id': task_id, 'seed': seed})
         to_return = r.json()

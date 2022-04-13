@@ -29,7 +29,7 @@ def main():
     if args.redis_up:
         response = client.redis_up()
     if args.task_id and args.seed:
-        response = client.status(args.task_id, args.seed)
+        response = client.task_status(args.task_id, args.seed)
     elif args.file:
         response = client.submit_from_disk(args.file, seed_expire=3600)
     print(json.dumps(response, indent=2))
