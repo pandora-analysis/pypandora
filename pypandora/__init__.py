@@ -16,6 +16,9 @@ def main():
     group2 = parser.add_argument_group('getStatus')
     group2.add_argument('--task_id', help="The id of the task you'd like to get the status of")
     group2.add_argument('--seed', help="The seed of the task you'd like to get the status of")
+    group2.add_argument('--all_workers', help="Do you want the details of every workers ? If yes, print 1, else print 0")
+    group2.add_argument('--worker_name', help="The name of the worker you want to get the report of")
+    group2.add_argument('--details', help="Do you want the details of the worker status ? If yes, print 1, else print 0")
     args = parser.parse_args()
 
     if args.url:
@@ -28,7 +31,9 @@ def main():
         sys.exit(1)
     if args.redis_up:
         response = client.redis_up()
-    if args.task_id and args.seed:
+    if args.all_workers or args.worker_name:
+        response = client.worker_status(args.task_id, args.all_workers, args.details, args.seed, args.worker_name)
+    elif args.task_id and args.seed:
         response = client.task_status(args.task_id, args.seed)
     elif args.file:
         response = client.submit_from_disk(args.file, seed_expire=3600)

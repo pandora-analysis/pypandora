@@ -93,3 +93,17 @@ class PyPandora():
         r = self.session.get(url, params={'task_id': task_id, 'seed': seed})
         to_return = r.json()
         return to_return
+
+    def worker_status(self, task_id: str, all_workers: int, details : int, seed: Optional[str]=None, worker_name: Optional[str]=None) -> Dict[str, Any]:
+        '''Get the status of a task.
+
+        :param task_id: The UUID of the task
+        :param seed: The seed. The seed must be still valid at the time the query is made. It is optional if the session is authenticated.
+        :param all_workers: If you want the details of every worker put this param to 1, else 0
+        :param worker_name: The name of the worker you want the status of. It is optional if you want every workers details
+        :param details: If you want the details of the worker put this param to 1, else 0
+        '''
+        url = urljoin(self.root_url, 'worker_status')
+        r = self.session.get(url, params={'task_id': task_id, 'seed': seed, 'all_workers': all_workers, 'worker_name': worker_name, 'details': details})
+        to_return = r.json()
+        return to_return
