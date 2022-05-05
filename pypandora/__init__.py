@@ -16,9 +16,9 @@ def main():
     group2 = parser.add_argument_group('getStatus')
     group2.add_argument('--task_id', help="The id of the task you'd like to get the status of")
     group2.add_argument('--seed', help="The seed of the task you'd like to get the status of")
-    group2.add_argument('--all_workers', help="Do you want the details of every workers ? If yes, print 1, else print 0")
+    group2.add_argument('--all_workers', action='store_true', default=False, help="True if you want the status of every workers")
     group2.add_argument('--worker_name', help="The name of the worker you want to get the report of")
-    group2.add_argument('--details', help="Do you want the details of the worker status ? If yes, print 1, else print 0")
+    group2.add_argument('--details', action='store_true', default=False, help="True if you want the details of the workers")
     args = parser.parse_args()
 
     if args.url:
