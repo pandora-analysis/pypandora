@@ -93,7 +93,7 @@ class PyPandora():
         r = self.session.get(url, params={'task_id': task_id, 'seed': seed})
         return r.json()
 
-    def worker_status(self, task_id: str, all_workers: bool=False, details : bool=False, seed: Optional[str]=None, worker_name: Optional[str]=None) -> Dict[str, Any]:
+    def worker_status(self, task_id: str, all_workers: bool=False, details: bool=False, seed: Optional[str]=None, worker_name: Optional[str]=None) -> Dict[str, Any]:
         '''Get the status of a task.
 
         :param task_id: The UUID of the task
