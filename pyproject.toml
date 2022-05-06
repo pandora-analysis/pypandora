@@ -36,10 +36,10 @@ requests = "^2.27.1"
 Sphinx = { version = "^4.5", optional = true }
 
 [tool.poetry.dev-dependencies]
-mypy = "^0.942"
-types-requests = "^2.27.16"
-ipython = "^8.2.0"
-pytest = "^7.1.1"
+mypy = "^0.950"
+types-requests = "^2.27.25"
+ipython = "^8.3.0"
+pytest = "^7.1.2"
 
 [tool.poetry.extras]
 docs = ["Sphinx"]
