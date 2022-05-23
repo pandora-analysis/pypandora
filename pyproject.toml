@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pypandora"
-version = "0.7"
+version = "0.8"
 description = "Python CLI and module for pandora"
 authors = ["Raphaël Vinot <raphael.vinot@circl.lu>"]
 license = "BSD-3-Clause"

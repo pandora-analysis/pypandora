@@ -1,12 +1,20 @@
 #!/usr/bin/env python3
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from io import BytesIO
 from pathlib import Path
 from typing import Dict, Optional, Any, Union
 from urllib.parse import urljoin, urlparse
 
 import requests
+
+
+class PyPandoraError(Exception):
+    pass
+
+
+class AuthError(PyPandoraError):
+    pass
 
 
 class PyPandora():
@@ -23,6 +31,7 @@ class PyPandora():
         if not self.root_url.endswith('/'):
             self.root_url += '/'
         self.session = requests.session()
+        self.apikey: Optional[str] = None
 
     @property
     def is_up(self) -> bool:
@@ -104,4 +113,74 @@ class PyPandora():
         '''
         url = urljoin(self.root_url, 'worker_status')
         r = self.session.get(url, params={'task_id': task_id, 'seed': seed, 'all_workers': 1 if all_workers else 0, 'worker_name': worker_name, 'details': 1 if details else 0})
+        return r.json()
+
+    def get_apikey(self, username: str, password: str) -> Dict[str, str]:
+        '''Get the API key for the given user.'''
+        to_post = {'username': username, 'password': password}
+        r = self.session.get(urljoin(self.root_url, str(Path('json', 'get_token'))), params=to_post)
+        return r.json()
+
+    def init_apikey(self, username: Optional[str]=None, password: Optional[str]=None, apikey: Optional[str]=None):
+        '''Init the API key for the current session. All the requests against pandora after this call will be authenticated.'''
+        if apikey:
+            self.apikey = apikey
+        elif username and password:
+            t = self.get_apikey(username, password)
+            if 'authkey' in t:
+                self.apikey = t['authkey']
+        else:
+            raise AuthError('Username and password required')
+        if self.apikey:
+            self.session.headers['Authorization'] = self.apikey
+        else:
+            raise AuthError('Unable to initialize API key')
+
+    def _make_stats_path(self, url_path: Path, interval: str,
+                         year: Optional[int]=None, month: Optional[int]=None,
+                         week: Optional[int]=None, day: Optional[int]=None,
+                         full_date: Optional[Union[date, datetime]]=None) -> Path:
+        if interval not in ['year', 'month', 'week', 'day']:
+            raise PyPandoraError('Invalid interval')
+        if full_date:
+            year = full_date.year
+            month = full_date.month
+            day = full_date.day
+            # FIXME Starting in python 3.9, we can do full_date.isocalendar().week
+            week = full_date.isocalendar()[1]
+        url_path /= interval
+        if interval == 'year' and year:
+            url_path /= str(year)
+        elif interval == 'month' and month:
+            url_path /= str(month)
+            if year:
+                url_path /= str(year)
+        elif interval == 'week' and week:
+            url_path /= str(week)
+            if year:
+                url_path /= str(year)
+        elif interval == 'day' and day:
+            url_path /= str(day)
+            if month:
+                url_path /= str(month)
+                if year:
+                    url_path /= str(year)
+        return url_path
+
+    def get_stats(self, interval: str='year', year: Optional[int]=None,
+                  month: Optional[int]=None, week: Optional[int]=None,
+                  day: Optional[int]=None, full_date: Optional[Union[date, datetime]]=None):
+        url_path = self._make_stats_path(Path('api', 'stats'), interval,
+                                         year, month, week, day, full_date)
+        url = urljoin(self.root_url, str(url_path))
+        r = self.session.get(url)
+        return r.json()
+
+    def get_submit_stats(self, interval: str='year', year: Optional[int]=None,
+                         month: Optional[int]=None, week: Optional[int]=None,
+                         day: Optional[int]=None, full_date: Optional[Union[date, datetime]]=None):
+        url_path = self._make_stats_path(Path('api', 'stats', 'submit'), interval,
+                                         year, month, week, day, full_date)
+        url = urljoin(self.root_url, str(url_path))
+        r = self.session.get(url)
         return r.json()
