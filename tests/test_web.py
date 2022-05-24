@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import hashlib
 import time
 import unittest
 
@@ -23,7 +24,7 @@ class TestBasic(unittest.TestCase):
         response = self.client.submit_from_disk(__file__, seed_expire=3600)
         self.assertTrue(response['success'], response)
         i = 0
-        while i < 10:
+        while i < 30:
             status = self.client.task_status(response['taskId'], response['seed'])
             if status['status'] == 'CLEAN':
                 break
@@ -32,3 +33,7 @@ class TestBasic(unittest.TestCase):
                 time.sleep(1)
         else:
             raise Exception(f'The task never finished: {status}.')
+        with open(__file__, 'rb') as f:
+            md5 = hashlib.md5(f.read()).hexdigest()
+        response_search = self.client.search(md5)
+        self.assertEqual(response_search['matching_tasks'][0], response['taskId'])
