@@ -170,6 +170,7 @@ class PyPandora():
     def get_stats(self, interval: str='year', year: Optional[int]=None,
                   month: Optional[int]=None, week: Optional[int]=None,
                   day: Optional[int]=None, full_date: Optional[Union[date, datetime]]=None):
+        '''[Admin only] Gets an overview of what was submitted on the platform'''
         url_path = self._make_stats_path(Path('api', 'stats'), interval,
                                          year, month, week, day, full_date)
         url = urljoin(self.root_url, str(url_path))
@@ -179,6 +180,7 @@ class PyPandora():
     def get_submit_stats(self, interval: str='year', year: Optional[int]=None,
                          month: Optional[int]=None, week: Optional[int]=None,
                          day: Optional[int]=None, full_date: Optional[Union[date, datetime]]=None):
+        '''[Admin only] Get the number of submissions on a specific interval'''
         url_path = self._make_stats_path(Path('api', 'stats', 'submit'), interval,
                                          year, month, week, day, full_date)
         url = urljoin(self.root_url, str(url_path))
@@ -186,6 +188,7 @@ class PyPandora():
         return r.json()
 
     def search(self, query: str, limit_days: int=3):
+        '''[Admin only] Search a hash or a filename in the tasks'''
         url_path = Path('api', 'search', query)
         if limit_days:
             url_path /= str(limit_days)
