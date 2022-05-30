@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pypandora"
-version = "0.8"
+version = "0.8.1"
 description = "Python CLI and module for pandora"
 authors = ["Raphaël Vinot <raphael.vinot@circl.lu>"]
 license = "BSD-3-Clause"
@@ -33,12 +33,12 @@ pandora = 'pypandora:main'
 [tool.poetry.dependencies]
 python = "^3.8"
 requests = "^2.27.1"
-Sphinx = { version = "^4.5", optional = true }
+Sphinx = { version = "^4.5.0", optional = true }
 
 [tool.poetry.dev-dependencies]
 mypy = "^0.950"
-types-requests = "^2.27.25"
-ipython = "^8.3.0"
+types-requests = "^2.27.29"
+ipython = "^8.4.0"
 pytest = "^7.1.2"
 
 [tool.poetry.extras]

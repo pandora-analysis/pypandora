@@ -3,7 +3,7 @@ from setuptools import setup  # type: ignore
 
 setup(
     name='pandora',
-    version='0.8-dev',
+    version='0.9-dev',
     author='Raphaël Vinot',
     author_email='raphael.vinot@circl.lu',
     maintainer='Raphaël Vinot',

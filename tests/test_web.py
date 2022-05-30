@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import hashlib
 import time
 import unittest
 
@@ -33,7 +32,3 @@ class TestBasic(unittest.TestCase):
                 time.sleep(1)
         else:
             raise Exception(f'The task never finished: {status}.')
-        with open(__file__, 'rb') as f:
-            md5 = hashlib.md5(f.read()).hexdigest()
-        response_search = self.client.search(md5)
-        self.assertEqual(response_search['matching_tasks'][0], response['taskId'])
