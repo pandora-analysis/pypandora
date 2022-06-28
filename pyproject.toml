@@ -32,12 +32,12 @@ pandora = 'pypandora:main'
 
 [tool.poetry.dependencies]
 python = "^3.8"
-requests = "^2.27.1"
-Sphinx = { version = "^4.5.0", optional = true }
+requests = "^2.28.0"
+Sphinx = { version = "^5.0.2", optional = true }
 
 [tool.poetry.dev-dependencies]
-mypy = "^0.950"
-types-requests = "^2.27.29"
+mypy = "^0.961"
+types-requests = "^2.28.0"
 ipython = "^8.4.0"
 pytest = "^7.1.2"
 
