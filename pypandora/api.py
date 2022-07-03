@@ -75,7 +75,8 @@ class PyPandora():
         return int(interval.total_seconds())
 
     def submit(self, file_in_memory: BytesIO, filename: str, /,
-               seed_expire: Optional[Union[datetime, timedelta, int]]=None) -> Dict[str, Any]:
+               seed_expire: Optional[Union[datetime, timedelta, int]]=None,
+               password: Optional[str]=None) -> Dict[str, Any]:
         '''Submit a file from the disk.
 
         :param file_in_memory: Memory object of the file to submit.
@@ -87,7 +88,10 @@ class PyPandora():
         '''
         files = {'file': (filename, file_in_memory)}
         url = urljoin(self.root_url, 'submit')
-        r = self.session.post(url, files=files, params={'validity': self._expire_in_sec(seed_expire)})
+        params: Dict[str, Optional[Union[int, str]]] = {'validity': self._expire_in_sec(seed_expire)}
+        if password:
+            params['password'] = password
+        r = self.session.post(url, files=files, params=params)
         to_return = r.json()
         to_return['link'] = urljoin(self.root_url, to_return['link'])
         return to_return
