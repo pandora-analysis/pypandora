@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import pkg_resources
+
 from datetime import datetime, timedelta, date
 from io import BytesIO
 from pathlib import Path
@@ -19,7 +21,7 @@ class AuthError(PyPandoraError):
 
 class PyPandora():
 
-    def __init__(self, root_url: str="https://pandora.circl.lu/"):
+    def __init__(self, root_url: str="https://pandora.circl.lu/", useragent: Optional[str]=None):
         '''Query a specific instance.
 
         :param root_url: URL of the instance to query.
@@ -31,6 +33,7 @@ class PyPandora():
         if not self.root_url.endswith('/'):
             self.root_url += '/'
         self.session = requests.session()
+        self.session.headers['user-agent'] = useragent if useragent else f'PyPandora / {pkg_resources.get_distribution("pypandora").version}'
         self.apikey: Optional[str] = None
 
     @property
