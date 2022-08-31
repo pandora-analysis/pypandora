@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 
-import pkg_resources
-
 from datetime import datetime, timedelta, date
+from importlib.metadata import version
 from io import BytesIO
 from pathlib import Path
 from typing import Dict, Optional, Any, Union
@@ -33,7 +32,7 @@ class PyPandora():
         if not self.root_url.endswith('/'):
             self.root_url += '/'
         self.session = requests.session()
-        self.session.headers['user-agent'] = useragent if useragent else f'PyPandora / {pkg_resources.get_distribution("pypandora").version}'
+        self.session.headers['user-agent'] = useragent if useragent else f'PyPandora / {version("pypandora")}'
         self.apikey: Optional[str] = None
 
     @property
