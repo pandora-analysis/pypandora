@@ -98,7 +98,9 @@ class PyPandora():
             params['password'] = password
         r = self.session.post(url, files=files, params=params)
         to_return = r.json()
-        to_return['link'] = urljoin(self.root_url, to_return['link'])
+        if 'link' in to_return:
+            # Otherwise, we have an error.
+            to_return['link'] = urljoin(self.root_url, to_return['link'])
         return to_return
 
     def task_status(self, task_id: str, seed: Optional[str]=None) -> Dict[str, Any]:
