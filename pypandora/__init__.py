@@ -1,13 +1,18 @@
+from __future__ import annotations
+
 import argparse
 import json
 import sys
 
 from pathlib import Path
+from typing import Any
 
-from .api import PyPandora
+from .api import PyPandora, PyPandoraError, AuthError
+
+__all__ = ['PyPandora', 'PyPandoraError', 'AuthError']
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description='Submit a file.')
     parser.add_argument('--url', type=str, help='URL of the instance (defaults to https://pandora.circl.lu/).')
     group = parser.add_mutually_exclusive_group(required=False)
@@ -29,6 +34,7 @@ def main():
     if not client.is_up:
         print(f'Unable to reach {client.root_url}. Is the server up?')
         sys.exit(1)
+    response: bool | dict[str, Any]
     if args.redis_up:
         response = client.redis_up()
     if args.all_workers or args.worker_name:

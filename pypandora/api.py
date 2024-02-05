@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
+from __future__ import annotations
+
 from datetime import datetime, timedelta, date
 from importlib.metadata import version
 from io import BytesIO
 from pathlib import Path
-from typing import Dict, Optional, Any, Union
+from typing import Any
 from urllib.parse import urljoin, urlparse
 
 import requests
@@ -20,8 +22,8 @@ class AuthError(PyPandoraError):
 
 class PyPandora():
 
-    def __init__(self, root_url: str="https://pandora.circl.lu/", useragent: Optional[str]=None,
-                 *, proxies: Optional[Dict[str, str]]=None):
+    def __init__(self, root_url: str="https://pandora.circl.lu/", useragent: str | None=None,
+                 *, proxies: dict[str, str] | None=None):
         '''Query a specific instance.
 
         :param root_url: URL of the instance to query.
@@ -38,7 +40,7 @@ class PyPandora():
         self.session.headers['user-agent'] = useragent if useragent else f'PyPandora / {version("pypandora")}'
         if proxies:
             self.session.proxies.update(proxies)
-        self.apikey: Optional[str] = None
+        self.apikey: str | None = None
 
     @property
     def is_up(self) -> bool:
@@ -49,13 +51,13 @@ class PyPandora():
             return False
         return r.status_code == 200
 
-    def redis_up(self) -> Dict:
+    def redis_up(self) -> bool:
         '''Check if redis is up and running'''
         r = self.session.get(urljoin(self.root_url, 'redis_up'))
         return r.json()
 
-    def submit_from_disk(self, file_on_disk: Union[str, Path], /,
-                         seed_expire: Optional[Union[datetime, timedelta, int]]=None) -> Dict[str, Any]:
+    def submit_from_disk(self, file_on_disk: str | Path, /,
+                         seed_expire: datetime | timedelta | int | None=None) -> dict[str, Any]:
         '''Submit a file from the disk.
 
         :param file_on_disk: The path to the file to upload.
@@ -73,7 +75,7 @@ class PyPandora():
             file_in_memory = BytesIO(f.read())
         return self.submit(file_in_memory, filename, seed_expire)
 
-    def _expire_in_sec(self, seed_expire: Optional[Union[datetime, timedelta, int]]=None) -> Optional[int]:
+    def _expire_in_sec(self, seed_expire: datetime | timedelta | int | None=None) -> int | None:
         if isinstance(seed_expire, int) or seed_expire is None:
             return seed_expire
         if isinstance(seed_expire, timedelta):
@@ -85,8 +87,8 @@ class PyPandora():
         return int(interval.total_seconds())
 
     def submit(self, file_in_memory: BytesIO, filename: str, /,
-               seed_expire: Optional[Union[datetime, timedelta, int]]=None,
-               password: Optional[str]=None) -> Dict[str, Any]:
+               seed_expire: datetime | timedelta | int | None=None,
+               password: str | None=None) -> dict[str, Any]:
         '''Submit a file from the disk.
 
         :param file_in_memory: Memory object of the file to submit.
@@ -98,7 +100,7 @@ class PyPandora():
         '''
         files = {'file': (filename, file_in_memory)}
         url = urljoin(self.root_url, 'submit')
-        params: Dict[str, Optional[Union[int, str]]] = {'validity': self._expire_in_sec(seed_expire)}
+        params: dict[str, int | str | None] = {'validity': self._expire_in_sec(seed_expire)}
         if password:
             params['password'] = password
         r = self.session.post(url, files=files, params=params)
@@ -108,7 +110,7 @@ class PyPandora():
             to_return['link'] = urljoin(self.root_url, to_return['link'])
         return to_return
 
-    def task_status(self, task_id: str, seed: Optional[str]=None) -> Dict[str, Any]:
+    def task_status(self, task_id: str, seed: str | None=None) -> dict[str, Any]:
         '''Get the status of a task.
 
         :param task_id: The UUID of the task
@@ -118,7 +120,7 @@ class PyPandora():
         r = self.session.get(url, params={'task_id': task_id, 'seed': seed})
         return r.json()
 
-    def worker_status(self, task_id: str, all_workers: bool=False, details: bool=False, seed: Optional[str]=None, worker_name: Optional[str]=None) -> Dict[str, Any]:
+    def worker_status(self, task_id: str, all_workers: bool=False, details: bool=False, seed: str | None=None, worker_name: str | None=None) -> dict[str, Any]:
         '''Get the status of a task.
 
         :param task_id: The UUID of the task
@@ -131,13 +133,13 @@ class PyPandora():
         r = self.session.get(url, params={'task_id': task_id, 'seed': seed, 'all_workers': 1 if all_workers else 0, 'worker_name': worker_name, 'details': 1 if details else 0})
         return r.json()
 
-    def get_apikey(self, username: str, password: str) -> Dict[str, str]:
+    def get_apikey(self, username: str, password: str) -> dict[str, str]:
         '''Get the API key for the given user.'''
         to_post = {'username': username, 'password': password}
         r = self.session.get(urljoin(self.root_url, str(Path('api', 'get_token'))), params=to_post)
         return r.json()
 
-    def init_apikey(self, username: Optional[str]=None, password: Optional[str]=None, apikey: Optional[str]=None):
+    def init_apikey(self, username: str | None=None, password: str | None=None, apikey: str | None=None) -> None:
         '''Init the API key for the current session. All the requests against pandora after this call will be authenticated.'''
         if apikey:
             self.apikey = apikey
@@ -153,9 +155,9 @@ class PyPandora():
             raise AuthError('Unable to initialize API key')
 
     def _make_stats_path(self, url_path: Path, interval: str,
-                         year: Optional[int]=None, month: Optional[int]=None,
-                         week: Optional[int]=None, day: Optional[int]=None,
-                         full_date: Optional[Union[date, datetime]]=None) -> Path:
+                         year: int | None=None, month: int | None=None,
+                         week: int | None=None, day: int | None=None,
+                         full_date: date | datetime | None=None) -> Path:
         if interval not in ['year', 'month', 'week', 'day']:
             raise PyPandoraError('Invalid interval')
         if full_date:
@@ -183,9 +185,9 @@ class PyPandora():
                     url_path /= str(year)
         return url_path
 
-    def get_stats(self, interval: str='year', year: Optional[int]=None,
-                  month: Optional[int]=None, week: Optional[int]=None,
-                  day: Optional[int]=None, full_date: Optional[Union[date, datetime]]=None):
+    def get_stats(self, interval: str='year', year: int | None=None,
+                  month: int | None=None, week: int | None=None,
+                  day: int | None=None, full_date: date | datetime | None=None) -> dict[str, Any]:
         '''[Admin only] Gets an overview of what was submitted on the platform'''
         url_path = self._make_stats_path(Path('api', 'stats'), interval,
                                          year, month, week, day, full_date)
@@ -193,9 +195,9 @@ class PyPandora():
         r = self.session.get(url)
         return r.json()
 
-    def get_submit_stats(self, interval: str='year', year: Optional[int]=None,
-                         month: Optional[int]=None, week: Optional[int]=None,
-                         day: Optional[int]=None, full_date: Optional[Union[date, datetime]]=None):
+    def get_submit_stats(self, interval: str='year', year: int | None=None,
+                         month: int | None=None, week: int | None=None,
+                         day: int | None=None, full_date: date | datetime | None=None) -> dict[str, Any]:
         '''[Admin only] Get the number of submissions on a specific interval'''
         url_path = self._make_stats_path(Path('api', 'stats', 'submit'), interval,
                                          year, month, week, day, full_date)
@@ -203,7 +205,7 @@ class PyPandora():
         r = self.session.get(url)
         return r.json()
 
-    def search(self, query: str, limit_days: int=3):
+    def search(self, query: str, limit_days: int=3) -> dict[str, Any]:
         '''[Admin only] Search a hash or a filename in the tasks'''
         url_path = Path('api', 'search', query)
         if limit_days:

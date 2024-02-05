@@ -8,18 +8,18 @@ from pypandora import PyPandora
 
 class TestBasic(unittest.TestCase):
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.client = PyPandora(root_url="http://127.0.0.1:6100")
 
-    def test_up(self):
+    def test_up(self) -> None:
         self.assertTrue(self.client.is_up)
         self.assertTrue(self.client.redis_up())
 
-    def test_submit(self):
+    def test_submit(self) -> None:
         response = self.client.submit_from_disk(__file__)
         self.assertTrue(response['success'], response)
 
-    def test_status(self):
+    def test_status(self) -> None:
         response = self.client.submit_from_disk(__file__, seed_expire=3600)
         self.assertTrue(response['success'], response)
         i = 0
