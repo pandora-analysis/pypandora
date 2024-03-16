@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import datetime, timedelta, date
 from importlib.metadata import version
 from io import BytesIO
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any
 from urllib.parse import urljoin, urlparse
 
@@ -136,7 +136,7 @@ class PyPandora():
     def get_apikey(self, username: str, password: str) -> dict[str, str]:
         '''Get the API key for the given user.'''
         to_post = {'username': username, 'password': password}
-        r = self.session.get(urljoin(self.root_url, str(Path('api', 'get_token'))), params=to_post)
+        r = self.session.get(urljoin(self.root_url, str(PurePosixPath('api', 'get_token'))), params=to_post)
         return r.json()
 
     def init_apikey(self, username: str | None=None, password: str | None=None, apikey: str | None=None) -> None:
@@ -154,10 +154,10 @@ class PyPandora():
         else:
             raise AuthError('Unable to initialize API key')
 
-    def _make_stats_path(self, url_path: Path, interval: str,
+    def _make_stats_path(self, url_path: PurePosixPath, interval: str,
                          year: int | None=None, month: int | None=None,
                          week: int | None=None, day: int | None=None,
-                         full_date: date | datetime | None=None) -> Path:
+                         full_date: date | datetime | None=None) -> PurePosixPath:
         if interval not in ['year', 'month', 'week', 'day']:
             raise PyPandoraError('Invalid interval')
         if full_date:
@@ -189,7 +189,7 @@ class PyPandora():
                   month: int | None=None, week: int | None=None,
                   day: int | None=None, full_date: date | datetime | None=None) -> dict[str, Any]:
         '''[Admin only] Gets an overview of what was submitted on the platform'''
-        url_path = self._make_stats_path(Path('api', 'stats'), interval,
+        url_path = self._make_stats_path(PurePosixPath('api', 'stats'), interval,
                                          year, month, week, day, full_date)
         url = urljoin(self.root_url, str(url_path))
         r = self.session.get(url)
@@ -199,7 +199,7 @@ class PyPandora():
                          month: int | None=None, week: int | None=None,
                          day: int | None=None, full_date: date | datetime | None=None) -> dict[str, Any]:
         '''[Admin only] Get the number of submissions on a specific interval'''
-        url_path = self._make_stats_path(Path('api', 'stats', 'submit'), interval,
+        url_path = self._make_stats_path(PurePosixPath('api', 'stats', 'submit'), interval,
                                          year, month, week, day, full_date)
         url = urljoin(self.root_url, str(url_path))
         r = self.session.get(url)
@@ -207,7 +207,7 @@ class PyPandora():
 
     def search(self, query: str, limit_days: int=3) -> dict[str, Any]:
         '''[Admin only] Search a hash or a filename in the tasks'''
-        url_path = Path('api', 'search', query)
+        url_path = PurePosixPath('api', 'search', query)
         if limit_days:
             url_path /= str(limit_days)
         url = urljoin(self.root_url, str(url_path))
