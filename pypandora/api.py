@@ -213,3 +213,51 @@ class PyPandora():
         url = urljoin(self.root_url, str(url_path))
         r = self.session.get(url)
         return r.json()
+
+    def workers_stats_day(self, year: int | str | None=None, month: int | str | None=None, day: int | str | None=None) -> dict[str, Any]:
+        '''[Admin only] Get the workers stats for a specific day - defaults to today'''
+        url_path = PurePosixPath('api', 'workers_stats', 'day')
+        if day is not None:
+            url_path /= str(day)
+            if month is not None:
+                url_path /= str(month)
+                if year is not None:
+                    url_path /= str(year)
+
+        url = urljoin(self.root_url, str(url_path))
+        r = self.session.get(url)
+        return r.json()
+
+    def workers_stats_week(self, year: int | str | None=None, week: int | str | None=None) -> dict[str, Any]:
+        '''[Admin only] Get the workers stats for a specific week - defaults to this week'''
+        url_path = PurePosixPath('api', 'workers_stats', 'week')
+        if week is not None:
+            url_path /= str(week)
+            if year is not None:
+                url_path /= str(year)
+
+        url = urljoin(self.root_url, str(url_path))
+        r = self.session.get(url)
+        return r.json()
+
+    def workers_stats_month(self, year: int | str | None=None, month: int | str | None=None) -> dict[str, Any]:
+        '''[Admin only] Get the workers stats for a specific month - defaults to this month'''
+        url_path = PurePosixPath('api', 'workers_stats', 'month')
+        if month is not None:
+            url_path /= str(month)
+            if year is not None:
+                url_path /= str(year)
+
+        url = urljoin(self.root_url, str(url_path))
+        r = self.session.get(url)
+        return r.json()
+
+    def workers_stats_year(self, year: int | str | None=None) -> dict[str, Any]:
+        '''[Admin only] Get the workers stats for a specific year - defaults to this year'''
+        url_path = PurePosixPath('api', 'workers_stats', 'year')
+        if year is not None:
+            url_path /= str(year)
+
+        url = urljoin(self.root_url, str(url_path))
+        r = self.session.get(url)
+        return r.json()
