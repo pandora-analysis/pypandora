@@ -266,3 +266,10 @@ class PyPandora():
         url = urljoin(self.root_url, str(url_path))
         r = self.session.get(url)
         return r.json()
+
+    def get_enabled_workers(self) -> list[str]:
+        '''Get all the enabled workers'''
+        url_path = PurePosixPath('api', 'enabled_workers')
+        url = urljoin(self.root_url, str(url_path))
+        r = self.session.get(url)
+        return r.json()
