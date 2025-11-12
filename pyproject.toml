@@ -5,12 +5,12 @@ description = "Python CLI and module for pandora"
 authors = [{name="Raphaël Vinot", email="raphael.vinot@circl.lu"}]
 license = "BSD-3-Clause"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 
 dynamic = [ "classifiers" ]
 
 dependencies = [
-    "requests (>=2.32.4)"
+    "requests (>=2.32.5)"
 ]
 
 [project.urls]
@@ -36,9 +36,9 @@ pandora = 'pypandora:main'
 docs = ["Sphinx (>=8.2.3) ; python_version >= \"3.11\""]
 
 [tool.poetry.group.dev.dependencies]
-mypy = "^1.16.1"
-types-requests = "^2.32.4.20250611"
-pytest = ">=7.4.4,<9.0.0"
+mypy = "^1.18.2"
+types-requests = "^2.32.4.20250913"
+pytest = "^9.0.1"
 
 [build-system]
 requires = ["poetry-core>=2.0"]
