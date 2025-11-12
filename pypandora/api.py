@@ -115,6 +115,22 @@ class PyPandora():
             to_return['link'] = urljoin(self.root_url, to_return['link'])
         return to_return
 
+    def task_download(self, task_id: str, to_download: str, seed: str | None=None) -> BytesIO:
+        '''Get the status of a task.
+
+        :param task_id: The UUID of the task
+        :param to_download: The thing to download, can be 'img', 'pdf', 'txt', 'zip', 'txt_preview', 'misp'
+        :param seed: The seed. The seed must be still valid at the time the query is made. It is optional if the session is authenticated.
+        '''
+        path = Path('task-download') / task_id
+        if seed:
+            path /= f'seed-{seed}'
+        path /= to_download
+        url = urljoin(self.root_url, str(path))
+        print(url)
+        r = self.session.get(url)
+        return BytesIO(r.content)
+
     def task_status(self, task_id: str, seed: str | None=None) -> dict[str, Any]:
         '''Get the status of a task.
 
