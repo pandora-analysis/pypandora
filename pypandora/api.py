@@ -116,7 +116,17 @@ class PyPandora():
         return to_return
 
     def task_download(self, task_id: str, to_download: str, seed: str | None=None) -> BytesIO:
-        '''Get the status of a task.
+        '''Get elements created during a task. Unless you have an admin account and called `init_apikey` first, you need to pass a seed.
+        Even with a seed, your account may not be allowed to get specific emelents,
+        it depends how the pandora instance is configured and the roles associated with non-admin users.
+
+        That said, the `to_download` setting have the following meaning:
+
+            * `img`: Preview of the content of the file. It is a zip file containig images. If the file cannot be previewed, returns an error.
+            * `pdf`: If the uploaded file was a PDF, the pdf, an error otherwise.
+            * `txt`: Text extracted from the document (if any)
+            * `zip`: The original file, in password protected zip
+            * `misp`: The MISP export of the task
 
         :param task_id: The UUID of the task
         :param to_download: The thing to download, can be 'img', 'pdf', 'txt', 'zip', 'txt_preview', 'misp'
