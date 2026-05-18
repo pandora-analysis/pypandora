@@ -1,6 +1,6 @@
 [project]
 name = "pypandora"
-version = "1.11.0"
+version = "1.12.0"
 description = "Python CLI and module for pandora"
 authors = [{name="Raphaël Vinot", email="raphael.vinot@circl.lu"}]
 license = "BSD-3-Clause"
@@ -10,7 +10,7 @@ requires-python = ">=3.10"
 dynamic = [ "classifiers" ]
 
 dependencies = [
-    "requests (>=2.34.0)"
+    "requests (>=2.34.2)"
 ]
 
 [project.urls]
@@ -37,7 +37,7 @@ docs = ["Sphinx (>=9.1.0) ; python_version >= \"3.12\""]
 
 [tool.poetry.group.dev.dependencies]
 mypy = "^2.1.0"
-types-requests = "^2.33.0.20260508"
+types-requests = "^2.33.0.20260513"
 pytest = "^9.0.3"
 
 [build-system]
