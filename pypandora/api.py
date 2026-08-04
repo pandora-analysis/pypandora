@@ -121,6 +121,12 @@ class PyPandora():
         r = self.session.get(url, params={'task_id': task_id, 'seed': seed})
         return r.json()
 
+    def task_metadata(self, task_id: str, seed: str | None=None) -> dict[str, Any]:
+        '''Get the file metadata (exiftool) from a task'''
+        url = urljoin(self.root_url, 'task_metadata')
+        r = self.session.get(url, params={'task_id': task_id, 'seed': seed})
+        return r.json()
+
     def task_download(self, task_id: str, to_download: str, seed: str | None=None) -> BytesIO:
         '''Get elements created during a task. Unless you have an admin account and called `init_apikey` first, you need to pass a seed.
         Even with a seed, your account may not be allowed to get specific emelents,
