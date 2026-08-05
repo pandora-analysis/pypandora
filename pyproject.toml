@@ -36,9 +36,9 @@ pandora = 'pypandora:main'
 docs = ["Sphinx (>=9.1.0) ; python_version >= \"3.12\""]
 
 [tool.poetry.group.dev.dependencies]
-mypy = "^2.1.0"
-types-requests = "^2.33.0.20260518"
-pytest = "^9.1.0"
+mypy = "^2.3.0"
+types-requests = "^2.33.0.20260712"
+pytest = "^9.1.1"
 
 [build-system]
 requires = ["poetry-core>=2.0"]
